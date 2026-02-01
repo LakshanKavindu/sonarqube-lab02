@@ -2,48 +2,35 @@ package main.java.com.example;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 public class UserService {
 
-    // SECURITY ISSUE: Hardcoded credentials
-    private String password = "admin123";
+    private static final String DB_URL = "jdbc:mysql://localhost/db";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = System.getenv("DB_PASSWORD");
 
-    // VULNERABILITY: SQL Injection
     public void findUser(String username) throws Exception {
 
-        Connection conn =
-            DriverManager.getConnection("jdbc:mysql://localhost/db",
-                    "root", password);
+        String query = "SELECT * FROM users WHERE name = ?";
 
-        Statement st = conn.createStatement();
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement ps = conn.prepareStatement(query)) {
 
-        String query =
-            "SELECT * FROM users WHERE name = '" + username + "'";
-
-        st.executeQuery(query);
-    }
-
-    // SMELL: Unused method
-    public void notUsed() {
-        System.out.println("I am never called");
+            ps.setString(1, username);
+            ps.executeQuery();
+        }
     }
 
     public void deleteUser(String username) throws Exception {
 
-    Connection conn =
-            DriverManager.getConnection(
-                    "jdbc:mysql://localhost/db",
-                    "root",
-                    password
-            );
+        String query = "DELETE FROM users WHERE name = ?";
 
-    Statement st = conn.createStatement();
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+             PreparedStatement ps = conn.prepareStatement(query)) {
 
-    String query =
-            "DELETE FROM users WHERE name = '" + username + "'";
-
-    st.execute(query);
-}
-
+            ps.setString(1, username);
+            ps.executeUpdate();
+        }
+    }
 }

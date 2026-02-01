@@ -2,57 +2,34 @@ package main.java.com.example;
 
 public class Calculator {
 
-    // Code Smell: Long method + high complexity
-  public int calculate(int a, int b, String op) {
-
-    if (op.equals("add")) {
+    public int add(int a, int b) {
         return a + b;
+    }
 
-    } else if (op.equals("add-again")) {
-        return a + b; // DUPLICATION
-
-    } else if (op.equals("sub")) {
+    public int subtract(int a, int b) {
         return a - b;
+    }
 
-    } else if (op.equals("sub-again")) {
-        return a - b; // DUPLICATION
-
-    } else if (op.equals("mul")) {
+    public int multiply(int a, int b) {
         return a * b;
+    }
 
-    } else if (op.equals("div")) {
+    public int divide(int a, int b) {
         if (b == 0) {
-            return 0;
-        } else {
-            return a / b;
+            throw new IllegalArgumentException("Division by zero");
         }
+        return a / b;
+    }
 
-    } else if (op.equals("mod")) {
+    public int modulo(int a, int b) {
         return a % b;
+    }
 
-    } else if (op.equals("pow")) {
+    public int power(int a, int b) {
         int result = 1;
         for (int i = 0; i < b; i++) {
-            result = result * a;
+            result *= a;
         }
         return result;
-
-    } else {
-        return 0;
     }
-}
-
-
-    // Code Duplication (students must remove)
-    public int addNumbers(int x, int y) {
-        return x + y;
-    }
-
-    public int sumValues(int a, int b) {
-        return a + b;
-    }
-
-    public int addAgain(int a, int b) { 
-        return a + b; 
-    } 
 }
